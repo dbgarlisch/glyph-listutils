@@ -4,14 +4,53 @@ Provides the *pw::listutils* command ensemble to perform setwise operations on
 lists. See the [Set (mathematics) wiki][SetWiki] for details.
 
 ### Table of Contents
-* [Namespace pw::listutils](#namespace-pwthicken2d)
-* [pw::listutils Library Docs](#pwthicken2d-library-docs)
-* [pw::listutils Library Usage Examples](#pwthicken2d-library-usage-examples)
+* [Namespace pw::listutils](#namespace-pwlistutils)
+* [pw::listutils Library Docs](#pwlistutils-library-docs)
+* [pw::listutils Library Usage Examples](#pwlistutils-library-usage-examples)
     * [Thickening a 2D Grid for the COBALT Solver](#thickening-a-2d-grid-for-the-cobalt-solver)
 * [Disclaimer](#disclaimer)
 
 
-## Namespace pw::listutils
+## Using The Library
+
+To use this library you must include `listutils.tcl` in your application script.
+
+```Tcl
+source "/some/path/to/your/copy/of/listutils.tcl"
+```
+
+All of the procs in this collection reside in the **pw::listutils** ensemble.
+
+To call a proc in this collection, you must prefix the proc name with a **pw::listutils** ensemble name.
+
+For example:
+```Tcl
+source "/some/path/to/your/copy/of/listutils.tcl"
+pw::listutils lunion {1 2 3} {a b c}
+pw::listutils lmutate {a b c}
+```
+
+To avoid the long ensemble name prefix, you can also import the public **pw::listutils** procs into your script.
+
+For example, to import all procs.
+```Tcl
+source "/some/path/to/your/copy/of/listutils.tcl"
+# import all public procs
+namespace import ::pw::listutils::*
+lunion {1 2 3} {a b c}
+lmutate {a b c}
+```
+
+Or, to only import specific procs.
+```Tcl
+source "/some/path/to/your/copy/of/listutils.tcl"
+# import all public procs
+namespace import ::pw::listutils::lunion
+namespace import ::pw::listutils::lmutate
+lunion {1 2 3} {a b c}
+lmutate {a b c}
+```
+
 
 ## pw::listutils Library Docs
 
@@ -36,8 +75,8 @@ pw::listutils lproduct <subcmd> ?<options>?
 ```
 Computes the product for a collection of lists.
 
-For example, the product of {1 2 3} and {a b} is
-{{1 a} {1 b} {2 a} {2 b} {3 a} {3 b}}
+For example, the product of `{1 2 3}` and `{a b}` is
+`{{1 a} {1 b} {2 a} {2 b} {3 a} {3 b}}`
 
 <dl>
   <dt><code>subCmd</code></dt>
@@ -78,8 +117,8 @@ pw::listutils lmutate <subcmd> ?<options>?
 ```
 Computes the permutations of a list.
 
-For example, the permutations of {a b c} are {{a b c} {a c b} {b a c} {b c a}
-{c b a} {c a b}}.
+For example, the permutations of `{a b c}` are `{{a b c} {a c b} {b a c} {b c a}
+{c b a} {c a b}}`.
 
 <dl>
   <dt><code>subCmd</code></dt>
@@ -120,7 +159,7 @@ pw::listutils lunion ?<list> ...?
 ```
 Returns the union of a collection of lists.
 
-For example, the union of {1 2 3} and {a b} is {1 2 3 a b}.
+For example, the union of `{1 2 3}` and `{a b}` is `{1 2 3 a b}`.
 <dl>
   <dt><code>list ...</code></dt>
   <dd>The lists used used to compute the union. If no lists are provided, an
@@ -135,7 +174,7 @@ pw::listutils lintersect <list> <list> ?<list> ...?
 ```
 Returns the intersection of a collection of lists.
 
-For example, the intersection of {1 2 3 a} and {a 2 z} is {a 2}.
+For example, the intersection of `{1 2 3 a}` and `{a 2 z}` is `{a 2}`.
 <dl>
   <dt><code>list</code></dt>
   <dd>Two or more lists used used to compute the intersection.</dd>
@@ -149,7 +188,7 @@ pw::listutils lsubtract <list> <list> ?<list> ...?
 ```
 Returns the left-to-rigth subtraction of a collection of lists.
 
-For example, the subtraction of {1 2 3 a} and {a 2 z} is {1 3}.
+For example, the subtraction of `{1 2 3 a}` and `{a 2 z}` is `{1 3}`.
 <dl>
   <dt><code>list</code></dt>
   <dd>Two or more lists used used to compute the subtraction.</dd>
@@ -162,9 +201,9 @@ For example, the subtraction of {1 2 3 a} and {a 2 z} is {1 3}.
 pw::listutils lsymmetricdiff <list> <list> ?<list> ...?
 ```
 Returns the symmetric difference of a collection of lists. A symmetric
-difference of A nd B is equivalent to ((A subtract B) union (B subtract A)).
+difference of A and B is equivalent to ((A subtract B) union (B subtract A)).
 
-For example, the symmetric difference of {1 2 3 a} and {a 2 z} is {1 3 z}.
+For example, the symmetric difference of `{1 2 3 a}` and `{a 2 z}` is `{1 3 z}`.
 <dl>
   <dt><code>list</code></dt>
   <dd>Two or more lists used used to compute the symmetricdifference.</dd>
@@ -178,7 +217,7 @@ pw::listutils lissubset <superlist> <sublist> ?<sublist> ...?
 ```
 Returns true if all sublist lists are a subset of superlist.
 
-For example, {1 a} is a sublist of {1 2 3 a}.
+For example, `{1 a}` is a sublist of `{1 2 3 a}`.
 <dl>
   <dt><code>superlist</code></dt>
   <dd>The list to compare all sublists against.</dd>
@@ -193,8 +232,7 @@ For example, {1 a} is a sublist of {1 2 3 a}.
 #### Example 1
 
 ```Tcl
-    class xxxx {
-    }
+    xxxx
 ```
 
 
@@ -215,4 +253,4 @@ INABILITY TO USE THESE SCRIPTS EVEN IF POINTWISE HAS BEEN ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGES AND REGARDLESS OF THE FAULT OR NEGLIGENCE OF
 POINTWISE.
 
-[SetWiki]: http://www.sourceforge.net/projects/tcllib/
+[SetWiki]: http://en.wikipedia.org/wiki/Set_%28mathematics%29
