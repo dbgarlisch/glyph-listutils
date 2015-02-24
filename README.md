@@ -7,7 +7,7 @@ lists. See the [Set (mathematics) wiki][SetWiki] for details.
 * [Namespace pw::listutils](#namespace-pwlistutils)
 * [pw::listutils Library Docs](#pwlistutils-library-docs)
 * [pw::listutils Library Usage Examples](#pwlistutils-library-usage-examples)
-    * [Thickening a 2D Grid for the COBALT Solver](#thickening-a-2d-grid-for-the-cobalt-solver)
+    * [Example 1](#example-1)
 * [Disclaimer](#disclaimer)
 
 
