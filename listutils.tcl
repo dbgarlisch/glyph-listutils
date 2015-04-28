@@ -22,7 +22,8 @@ namespace eval pw::listutils {
     #   pw::listutils lproduct foreach <varname> <list> ?<list> ...? <body>
     namespace export lproduct
     proc lproduct { subCmd args } {
-      return [lproduct_${subCmd} {*}$args]
+      set callingLvl [expr {[info level] - 1}]
+      return [lproduct_${subCmd} $callingLvl {*}$args]
     }
 
 
@@ -128,52 +129,100 @@ namespace eval pw::listutils {
     }
 
 
+    # pw::listutils lunique <list>
+    namespace export lunique
+    proc lunique { lst } {
+	set tmp [dict create]
+	foreach l $lst {
+	    dict set tmp $l 1
+	}
+	return [dict keys $tmp]
+    }
+
+
+    # pw::listutils lremove <listvar> <value> ?<options>?
+    namespace export lremove
+    proc lremove { theListVar value args} {
+	upvar $theListVar theList
+	set idx [lsearch {*}$args $theList $value]
+	set theList [lreplace $theList $idx $idx]
+    }
+
+
+    # pw::listutils lstitch <list1> ?<list2>? ?<repeat>?
+    namespace export lstitch
+    proc lstitch { keys {vals {}} {repeatVals 0} } {
+	if { $repeatVals && ([llength $vals] < [llength $keys]) } {
+	    if { 1 == [llength $vals] } {
+		set vals [lrepeat [llength $keys] $vals]
+	    } else {
+		while { [llength $vals] < [llength $keys] } {
+		    set vals [concat $vals $vals]
+		}
+	    }
+	}
+	set db [dict create]
+	set ndx -1
+	foreach key $keys {
+	    dict set db $key [lindex $vals [incr ndx]]
+	}
+	return $db
+    }
+
+
+    # pw::listutils lshift <listvar>
+    namespace export lshift
+    proc lshift { theListVar } {
+	upvar $theListVar theList
+	set theList [lassign $theList ret]
+	return $ret
+    }
+
+
     #================================================================
     # PRIVATE lproduct IMPL PROCS
     #================================================================
 
     # pw::listutils lproduct foreach <varname> <list> ?<list> ...? <body>
-    proc lproduct_for { varName args } {
+    proc lproduct_foreach { callingLvl varName args } {
       if { 2 > [llength $args] } {
 	error "Invalid number of args: lproduct foreach <varname> <list> ?<list> ...? <body>"
       }
-      lproduct_for_level 3 $varName {*}$args
+      lproduct_foreach_level $callingLvl $varName {*}$args
     }
 
     # pw::listutils lproduct get <list> ?<list> ...?
-    proc lproduct_get { args } {
+    proc lproduct_get { callingLvl args } {
       if { 1 > [llength $args] } {
 	error "Invalid number of args: lproduct get <list> ?<list> ...?"
       }
       set ret [list]
-      lproduct_for_level 2 combo {*}$args {
+      lproduct_foreach_level $callingLvl combo {*}$args {
 	lappend ret $combo
       }
       return $ret
     }
 
     # pw::listutils lproduct foreach <varname> <list> ?<list> ...? <body>
-    proc lproduct_for_level { level varName args } {
+    proc lproduct_foreach_level { callingLvl varName args } {
       set body [lindex $args end]
       set args [lassign [lrange $args 0 end-1] vals]
       if { 0 == [llength $vals] } {
 	set vals [list {}]
       }
       foreach val $vals {
-	lproduct_forR $varName $level [list $val] $body {*}$args
+	lproduct_foreachR $varName $callingLvl [list $val] $body {*}$args
       }
     }
 
-    #  combo lproduct_forR varName level subCombo body ?<list> ...?
-    proc lproduct_forR { varName level subCombo body args } {
-      #puts "[string repeat {  } $level]lproduct_forR $varName level($level) subCombo($subCombo) body args($args)"
+    #  combo lproduct_foreachR varName callingLvl subCombo body ?<list> ...?
+    proc lproduct_foreachR { varName callingLvl subCombo body args } {
       if { 0 == [llength $args] } {
 	# no more sets
-	upvar $level $varName combo
+	upvar #$callingLvl $varName combo
 	set combo $subCombo
-	uplevel $level $body
+	uplevel #$callingLvl $body
       } else {
-	incr level
 	set args [lassign $args vals]
 	if { 0 == [llength $vals] } {
 	  set vals [list {}]
@@ -181,7 +230,7 @@ namespace eval pw::listutils {
 	foreach val $vals {
 	  set tmp $subCombo
 	  lappend tmp $val
-	  lproduct_forR $varName $level $tmp $body {*}$args
+	  lproduct_foreachR $varName $callingLvl $tmp $body {*}$args
 	}
       }
     }
