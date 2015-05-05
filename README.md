@@ -226,6 +226,77 @@ For example, `{1 a}` is a sublist of `{1 2 3 a}`.
 </dl>
 <br/>
 
+### lunique
+
+```Tcl
+pw::listutils lunique <list>
+```
+Returns a copy of list with all duplicates removed.
+
+For example, `lunique {1 a b c 2 3 1 b 9}` returns `{1 a b c 2 3 9}`.
+<dl>
+  <dt><code>list</code></dt>
+  <dd>The list to process.</dd>
+</dl>
+<br/>
+
+### lremove
+
+```Tcl
+pw::listutils lremove <listvarname> <value> ?<options>?
+```
+Removes the requested value from the list. Returns nothing.
+
+For example, `set lst {a b c d e} ; lremove lst c -sorted` sets `$lst` equal
+to `{a b d e}`.
+<dl>
+  <dt><code>listvarname</code></dt>
+  <dd>The list to process.</dd>
+  <dt><code>value</code></dt>
+  <dd>The value to remove from the list.</dd>
+  <dt><code>options</code></dt>
+  <dd>Any options supported by `lsearch <options> $lst $value`.</dd>
+</dl>
+<br/>
+
+### lstitch
+
+```Tcl
+pw::listutils lstitch <list1> ?<list2>? ?<repeat>?
+```
+Returns a single list comprised of alternating values from the `list1` and
+`list2`. The returned list will be the same length as `list1` and can be used
+as a `dict`.
+
+For example, `lstitch {1 2 3 4} {a b c d}` returns `{1 a 2 b 3 c 4 d}`.
+<dl>
+  <dt><code>list1</code></dt>
+  <dd>The list of dict keys.</dd>
+  <dt><code>list2</code></dt>
+  <dd>The list of dict values.</dd>
+  <dt><code>repeat</code></dt>
+  <dd>If 1, `list2` will be repeated as needed to provide values for `list1`.
+  If 0, any unmatched keys will have a value of {}. The default is 0.</dd>
+</dl>
+<br/>
+
+### lshift
+
+```Tcl
+pw::listutils lshift <listvarname>
+```
+Removes the first item from list and returns it. The list is modifed by this
+proc. If the list is empty, {} is returned.
+
+For example, `set lst {1 2 3 4} ; lshift $lst` returns `1` and sets `$lst` equal
+to `{2 3 4}`.
+<dl>
+  <dt><code>listvarname</code></dt>
+  <dd>The list to process.</dd>
+</dl>
+<br/>
+
+
 
 ### pw::listutils Library Usage Examples
 

@@ -179,6 +179,20 @@ namespace eval pw::listutils {
     }
 
 
+    # pw::listutils lisempty <list>
+    namespace export lisempty
+    proc lisempty { theList } {
+	return [expr {0 == [llength $theList]}]
+    }
+
+
+    # pw::listutils lcontains <list> <needle>
+    namespace export lcontains
+    proc lcontains { haystack needle args } {
+	return [expr {-1 != [lsearch {*}$args $haystack $needle]}]
+    }
+
+
     #================================================================
     # PRIVATE lproduct IMPL PROCS
     #================================================================
