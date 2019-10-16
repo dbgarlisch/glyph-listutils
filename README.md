@@ -288,7 +288,7 @@ pw::listutils lshift <listvarname>
 Removes the first item from list and returns it. The list is modifed by this
 proc. If the list is empty, {} is returned.
 
-For example, `set lst {1 2 3 4} ; lshift $lst` returns `1` and sets `$lst` equal
+For example, `set lst {1 2 3 4} ; lshift lst` returns `1` and sets `lst` equal
 to `{2 3 4}`.
 <dl>
   <dt><code>listvarname</code></dt>
