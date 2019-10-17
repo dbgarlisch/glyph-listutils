@@ -211,7 +211,7 @@ namespace eval pw::listutils {
 	error "Invalid number of args: lproduct get <list> ?<list> ...?"
       }
       set ret [list]
-      lproduct_foreach_level $callingLvl combo {*}$args {
+      lproduct_foreach_level [info level] combo {*}$args {
 	lappend ret $combo
       }
       return $ret
@@ -264,7 +264,7 @@ namespace eval pw::listutils {
     }
 
     #  pw::listutils lmutate foreach <varname> <list> <body>
-    proc lmutate_for { varName items body } {
+    proc lmutate_foreach { varName items body } {
       lmutate_for_level 3 0 $varName $items $body
     }
 
